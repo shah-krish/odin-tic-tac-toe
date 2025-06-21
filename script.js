@@ -29,13 +29,18 @@ function hasWon(board, lastIndex){
     }
     var horizontal = horizontalCheck(board, row); 
     var vertical = verticalCheck(board, col);
-    return horizontal || vertical;
+    var diagonal = diagonalCheck(board);
+    return horizontal || vertical || diagonal;
 }
 function verticalCheck(board, index){
     return board[index] === board[index + 3] && board[index] === board[index + 6];
 }
 function horizontalCheck(board, index){
     return board[index] === board[index + 1] && board[index] === board[index + 2];
+}
+function diagonalCheck(board){
+    return (board[0] === board[4] && board[0] === board[8]) ||
+    (board[2] === board[4] && board[2] === board[6]);
 }
 function playGame(player1, player2){
     const board = createBoard();
