@@ -2,16 +2,63 @@ function createPlayer(name, marker){
     return {name, marker};
 }
 function createBoard(){
-    const grid = [];
-    for (let i = 0; i < 3; i++) {
-      grid.push(new Array(3)); 
-    }
+    const grid = new Array(9);
     return grid;
+}
+function hasWon(board, lastIndex){
+    var marker = board[lastIndex];
+    var col = -1;
+    if(lastIndex%3==0){ //first column
+        col = 0;
+    }
+    else if(lastIndex%3==1){ //second column
+        col = 1;
+    }
+    else{ //third column
+        col = 2;
+    }
+    var row = -1;
+    if(lastIndex>5){
+        row = 6;
+    }
+    else if(lastIndex>2){
+        row = 3;
+    }
+    else{
+        row = 0;
+    }
+    var horizontal = horizontalCheck(board, row); 
+    var vertical = verticalCheck(board, col);
+    return horizontal || vertical;
+}
+function verticalCheck(board, index){
+    return board[index] === board[index + 3] && board[index] === board[index + 6];
+}
+function horizontalCheck(board, index){
+    return board[index] === board[index + 1] && board[index] === board[index + 2];
 }
 function playGame(player1, player2){
     const board = createBoard();
-    const whoseTurn = false; //false for p1, true for p2
-    
+    var whoseTurn = false; //false for p1, true for p2
+    let player = player1;
+    while(true){
+        if(whoseTurn == false){
+            player = player1;
+        }
+        else{
+            player = player2;
+        }
+        var index = prompt(player.name + " which index?");
+        board[index] = player.marker;
+        if(hasWon(board ,index)){
+            console.log(player.name + " has won!");
+            break;
+        }
+        whoseTurn = !whoseTurn;
+    }
 }
 const player1 = createPlayer("Krish",0);
-console.log(player1)
+const player2 = createPlayer("Opponent",1);
+/* console.log(player1);
+console.log(player2); */
+playGame(player1, player2);
