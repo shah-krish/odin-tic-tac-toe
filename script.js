@@ -3,6 +3,9 @@ function createPlayer(name, marker){
 }
 function createBoard(){
     const grid = new Array(9);
+    for(let i = 0; i<grid.length; i++){
+        grid[i] = -1;
+    }
     return grid;
 }
 function hasWon(board, lastIndex){
@@ -53,8 +56,13 @@ function playGame(player1, player2){
         else{
             player = player2;
         }
-        var index = prompt(player.name + " which index?");
-        board[index] = player.marker;
+        while(true){
+            var index = prompt(player.name + " which index?");
+            if(board[index]===-1){
+                board[index] = player.marker;
+                break;
+            }
+        }
         if(hasWon(board ,index)){
             console.log(player.name + " has won!");
             break;
