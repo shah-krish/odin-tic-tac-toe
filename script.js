@@ -2,34 +2,14 @@ function createPlayer(name, marker){
     return {name, marker};
 }
 function createBoard(){
-    const grid = new Array(9);
-    for(let i = 0; i<grid.length; i++){
-        grid[i] = -1;
-    }
+    const grid = new Array(9).fill(-1);
     return grid;
 }
 function hasWon(board, lastIndex){
     var marker = board[lastIndex];
-    var col = -1;
-    if(lastIndex%3==0){ //first column
-        col = 0;
-    }
-    else if(lastIndex%3==1){ //second column
-        col = 1;
-    }
-    else{ //third column
-        col = 2;
-    }
-    var row = -1;
-    if(lastIndex>5){
-        row = 6;
-    }
-    else if(lastIndex>2){
-        row = 3;
-    }
-    else{
-        row = 0;
-    }
+    var col = lastIndex % 3;
+    var row = lastIndex - col;
+
     var horizontal = horizontalCheck(board, row); 
     var vertical = verticalCheck(board, col);
     var diagonal = diagonalCheck(board);
@@ -43,35 +23,40 @@ function horizontalCheck(board, index){
 }
 function diagonalCheck(board){
     return (board[0] === board[4] && board[0] === board[8]) ||
-    (board[2] === board[4] && board[2] === board[6]);
+           (board[2] === board[4] && board[2] === board[6]);
 }
-function playGame(player1, player2){
-    const board = createBoard();
-    var whoseTurn = false; //false for p1, true for p2
-    let player = player1;
-    while(true){
-        if(whoseTurn == false){
-            player = player1;
-        }
-        else{
-            player = player2;
-        }
-        while(true){
-            var index = prompt(player.name + " which index?");
-            if(board[index]===-1){
-                board[index] = player.marker;
-                break;
+function isEmpty(board, index) {
+    return board[index] === -1;
+}
+
+const player1 = createPlayer("Krish", 0);
+const player2 = createPlayer("Opponent", 1);
+let currentPlayer = player1;
+let gameOver = false;
+const board = createBoard();
+
+function buttonClick(board) {
+    const buttons = document.querySelectorAll('.boardButton');
+    buttons.forEach(button => {
+        button.addEventListener("click", function () {
+            if (gameOver) return;
+
+            const index = Number(this.getAttribute('data-value'));
+
+            if (isEmpty(board, index)) {
+                board[index] = currentPlayer.marker;
+                this.textContent = currentPlayer.marker === 0 ? "X" : "O";
+
+                if (hasWon(board, index)) {
+                    console.log(currentPlayer.name + " has won!");
+                    gameOver = true;
+                    return;
+                }
+
+                currentPlayer = currentPlayer === player1 ? player2 : player1;
             }
-        }
-        if(hasWon(board ,index)){
-            console.log(player.name + " has won!");
-            break;
-        }
-        whoseTurn = !whoseTurn;
-    }
+        });
+    });
 }
-const player1 = createPlayer("Krish",0);
-const player2 = createPlayer("Opponent",1);
-/* console.log(player1);
-console.log(player2); */
-playGame(player1, player2);
+
+buttonClick(board);

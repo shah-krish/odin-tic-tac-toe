@@ -15,9 +15,9 @@ body{
     justify-content: center;
     gap: 20px;
 }
-.main >*{
-    /* border: 2px solid black; */
-}
+/* .main >*{
+    border: 2px solid black;
+} */
 .top{
     display:  grid;
     grid-template-columns: auto 1fr;
@@ -25,7 +25,10 @@ body{
     justify-content: center;
     align-items: center;
 }
-
+.bottom{
+    display:grid;
+    gap: 20px;
+}
 .board {
     display: grid;
     grid-template-columns: repeat(3, 100px);
