@@ -15,15 +15,20 @@ function hasWon(board, lastIndex){
     var diagonal = diagonalCheck(board);
     return horizontal || vertical || diagonal;
 }
-function verticalCheck(board, index){
-    return board[index] === board[index + 3] && board[index] === board[index + 6];
-}
 function horizontalCheck(board, index){
-    return board[index] === board[index + 1] && board[index] === board[index + 2];
+    const start = index - (index % 3); 
+    return board[start] !== -1 && board[start] === board[start + 1] && board[start] === board[start + 2];
 }
+
+function verticalCheck(board, index){
+    return board[index] !== -1 &&
+           board[index] === board[index + 3] &&
+           board[index] === board[index + 6];
+}
+
 function diagonalCheck(board){
-    return (board[0] === board[4] && board[0] === board[8]) ||
-           (board[2] === board[4] && board[2] === board[6]);
+    return (board[0] !== -1 && board[0] === board[4] && board[0] === board[8]) ||
+           (board[2] !== -1 && board[2] === board[4] && board[2] === board[6]);
 }
 function isEmpty(board, index) {
     return board[index] === -1;
@@ -48,7 +53,8 @@ function buttonClick(board) {
                 this.textContent = currentPlayer.marker === 0 ? "X" : "O";
 
                 if (hasWon(board, index)) {
-                    console.log(currentPlayer.name + " has won!");
+                    const winner = document.querySelector(".winnerName");
+                    winner.textContent = currentPlayer.name + " has won!";
                     gameOver = true;
                     return;
                 }
@@ -58,5 +64,22 @@ function buttonClick(board) {
         });
     });
 }
-
+const reset = document.querySelector('.resetButton');
+reset.addEventListener("click", function (){
+    for(let i =0; i<board.length;i++){
+        board[i] = -1;
+    }
+    const buttons = document.querySelectorAll('.boardButton');
+    buttons.forEach(button =>{
+        button.textContent = "";
+    })
+    gameOver = false;
+    const winner = document.querySelector(".winnerName");
+    winner.textContent = "";
+})
 buttonClick(board);
+
+const p1 = document.querySelector(".p1Name");
+p1.textContent = player1.name;
+const p2 = document.querySelector(".p2Name");
+p2.textContent = player2.name;
