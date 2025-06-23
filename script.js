@@ -34,6 +34,15 @@ function isEmpty(board, index) {
     return board[index] === -1;
 }
 
+function isDraw(board){
+    for(let i =0; i < board.length; i++){
+        if(board[i]==-1){
+            return false;
+        }
+    }
+    return true;
+}
+
 const player1 = createPlayer("Krish", 0);
 const player2 = createPlayer("Opponent", 1);
 let currentPlayer = player1;
@@ -56,6 +65,14 @@ function buttonClick(board) {
                     const winner = document.querySelector(".winnerName");
                     winner.textContent = currentPlayer.name + " has won!";
                     gameOver = true;
+                    currentPlayer = player1;
+                    return;
+                }
+                if(isDraw(board)){
+                    const winner = document.querySelector(".winnerName");
+                    winner.textContent = "It is a draw!";
+                    gameOver = true;
+                    currentPlayer = player1;
                     return;
                 }
 
@@ -83,3 +100,30 @@ const p1 = document.querySelector(".p1Name");
 p1.textContent = player1.name;
 const p2 = document.querySelector(".p2Name");
 p2.textContent = player2.name;
+
+const changeNameButtons = document.querySelectorAll(".changeName");
+changeNameButtons.forEach((button, index) =>{
+    button.addEventListener("click", function(){
+        const form  = this.nextElementSibling;
+        form.classList.toggle("hidden");
+    });
+});
+const nameForms = document.querySelectorAll(".nameForm");
+nameForms.forEach((form, index) => {
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const input = this.querySelector(".nameInput");
+        const newName = input.value.trim();
+        if (newName !== "") {
+            if (index === 0) {
+                player1.name = newName;
+                document.querySelector(".p1Name").textContent = newName;
+            } else {
+                player2.name = newName;
+                document.querySelector(".p2Name").textContent = newName;
+            }
+        }
+        input.value = "";
+        form.classList.add("hidden");
+    });
+});

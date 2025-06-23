@@ -42,3 +42,6 @@ body{
     border-color: 	#FF4500;
     border-radius: 8px;
 }
+.hidden {
+    display: none;
+}
